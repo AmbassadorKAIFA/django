@@ -1,0 +1,32 @@
+{% block content %}
+<html>
+ <head>
+    <meta charset="utf-8">
+    <title>Restaurant</title>
+	<link rel="stylesheet" href="">
+ </head>
+ <body>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <input type="submit" value="Submit">
+</form>
+    {% for table in table_list %}
+        {{ table}}<a href="{% url 'booking_table' table.pk %}">booking</a>
+    {% endfor %}
+    {% for date in date %}
+    <div class="date">
+    <form method="get" %}>
+        {{ table}}
+        {{ date }}
+        <button type="submit">Filter date</button>
+    </form>
+    {% endfor %}
+    </div>
+    {{table}}
+    Create table: <a href="{% url 'create_table' %}">Create table</a><br>
+
+    List: <a href="{% url 'list_tables' %}">List</a><br>
+ </body>
+</html>
+{% endblock %}
