@@ -1,5 +1,6 @@
 from django import forms
 
+
 from .models import *
 
 class CreateTableDataForm(forms.ModelForm):
@@ -11,21 +12,18 @@ class CreateTableDataForm(forms.ModelForm):
         }
 
 
-class DateForm(forms.Form):
-    date = forms.DateTimeField(
-        input_formats=['%d/%m/%Y'],
-        widget=forms.DateTimeInput(attrs={
-            'class': 'form-control datetimepicker-input',
-            'data-target': '#datetimepicker1'
-        })
-    )
-
+class DateInput(forms.DateInput):
+    input_type = 'date'
 
 class DateInputTableForm(forms.Form):
-    date = forms.DateField(input_formats='%Y-%m-%d')
+    date = forms.DateField(widget=DateInput)
 
 
 class TableBookingForm(forms.ModelForm):
     class Meta:
         model = Table
         fields = ('booking', )
+
+class AppointmentForm(forms.Form):
+    name = forms.CharField(max_length=100, min_length=2)
+    email = forms.EmailField(max_length=150, min_length=4, help_text='Укажите действующий Email')

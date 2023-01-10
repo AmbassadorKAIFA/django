@@ -4,8 +4,13 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, ListView, UpdateView)
 
-from .forms import (CreateTableDataForm, DateForm, DateInputTableForm, TableBookingForm)
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
+from .forms import (CreateTableDataForm, DateInputTableForm, TableBookingForm, AppointmentForm)
 from .models import Table
+
+import smtplib, ssl
 
 
 class MyPage(ListView):
@@ -15,9 +20,44 @@ class MyPage(ListView):
     # def get(self, request):
     #     form = DateInputTableForm()
     #     return render(request, "index.html", {"form": form})
-    #
-    # def post(self, response):
-    #     pass
+
+EMAIL_HOST = 'smtp.gmail.com'
+subject = 'Thank you for registering to our site'
+content = 'It means a world to us'
+
+# class Mail:
+#     def __init__(self):
+#         self.port = 587
+#         self.smtp_server_domain_name = "smtp.gmail.com"
+#         self.sender_mail = "vladtkach925@gmail.com"
+#         self.password = "Lolaca2282003-"
+#
+#     def send(self, emails, subject, content):
+#         ssl_context = ssl.create_default_context()
+#         service = smtplib.SMTP_SSL(self.smtp_server_domain_name, self.port, context = ssl_context)
+#         service.login(self.sender_mail, self.password)
+#
+#         for email in emails:
+#             result = service.sendmail(self.sender_mail, email, f"subject: {subject}\n{content}")
+#
+#             service.quit()
+#
+# mail = Mail()
+#
+# mail.send([''], subject, content)
+# def appointment_form(request):
+#     form = AppointmentForm()
+#     if request.method == 'POST':
+#         form = AppointmentForm(request.POST)
+#         if form.is_valid():
+#             print(form.cleaned_data['name'])
+#             print(form.cleaned_data['email'])
+#             print(request.POST.get('url_from'))
+#
+#         return redirect('/')
+
+
+
 
 
 class CreateTableDataView(CreateView):
@@ -35,6 +75,7 @@ class ListTablesView(ListView):
     def get_queryset(self):
         return self.model.objects.all()
 
+
 class TableListView1(ListView):
     model = Table
     template_name = 'index.html'
@@ -44,7 +85,7 @@ class TableListView1(ListView):
         if self.request.GET.get('date'):
             return self.model.objects.filter(
                 date=self.request.GET['date'],
-                booking=False
+                # booking=False
             )
         return self.model.objects.filter(booking=False)
 

@@ -22,4 +22,3 @@ class Orders(models.Model):
     table_num = models.IntegerField()
     email = models.CharField(max_length=90)
     date = models.DateTimeField()
-
