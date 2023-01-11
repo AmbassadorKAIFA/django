@@ -1,5 +1,6 @@
 from datetime import (date, datetime)
 
+from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import (CreateView, ListView, UpdateView)
@@ -7,10 +8,28 @@ from django.views.generic import (CreateView, ListView, UpdateView)
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from .forms import (CreateTableDataForm, DateInputTableForm, TableBookingForm, AppointmentForm)
+from .forms import (CreateTableDataForm, DateInputTableForm, TableBookingForm, MyUser, MyUserCreationForm, AppointmentForm)
 from .models import Table
 
 import smtplib, ssl
+
+
+class UserLoginView(LoginView):
+    success_url = reverse_lazy('login')
+    template_name = 'login.html'
+
+    def get_success_url(self):
+        return self.success_url
+
+class UserRegisterView(CreateView):
+    model = MyUser
+    form_class = MyUserCreationForm
+    success_url = reverse_lazy('register')
+    template_name = 'register.html'
+
+
+class UserLogoutView(LogoutView):
+    next_page = reverse_lazy('index')
 
 
 class MyPage(ListView):
